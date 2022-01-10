@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">seekBar</string>
+    <string name="text">How happy are you (1-10)?</string>
+</resources>

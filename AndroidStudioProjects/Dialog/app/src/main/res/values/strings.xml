@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Dialog</string>
+    <string name="titleDialog">Picture</string>
+    <string name="messageDialog">Show Juicy Picture ?</string>
+    <string name="yes">YES</string>
+    <string name="haha_no_picture">haha no juice for you!</string>
+    <string name="no">NO</string>
+</resources>

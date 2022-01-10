@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MoreActivities</string>
+    <string name="def_value">skipp1Response</string>
+    <string name="def_value2">skipp2Response</string>
+</resources>

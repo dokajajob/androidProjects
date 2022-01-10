@@ -1,0 +1,4 @@
+#Sun Dec 05 13:40:45 IST 2021
+base.0=/home/dokaja/AndroidStudioProjects/copyTutorial/SQLite_Android-Complete_Tutorial-master/app/build/intermediates/dex/debug/mergeDexDebug/out/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex
