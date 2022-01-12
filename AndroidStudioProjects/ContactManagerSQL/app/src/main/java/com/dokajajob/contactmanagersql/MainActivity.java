@@ -3,12 +3,14 @@ package com.dokajajob.contactmanagersql;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import Data.DatabaseHandler;
@@ -54,10 +56,16 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Reading: ", "Reading all contacts...");
                 List<Contact> contactList = db.getAllContacts();
 
+                List<String> listToPresent = new ArrayList<String>();
+
                 for (Contact c : contactList){
                     String log = "ID: " + c.getId() + " , Name: " + c.getName() + " , Phone: " + c.getPhone();
                     Log.d("Name: ", log);
-                    editTextTextMultiLine.setText(log);
+                    listToPresent.add(log);
+                    Log.d("logArray: ", String.valueOf(listToPresent));
+                    String joined = TextUtils.join(", ", listToPresent);
+                    editTextTextMultiLine.setText(joined);
+
                 }
 
             }
