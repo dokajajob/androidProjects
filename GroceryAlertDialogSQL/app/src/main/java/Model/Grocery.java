@@ -9,7 +9,7 @@ public class Grocery {
     public Grocery() {
     }
 
-    public Grocery(int id) {
+/*    public Grocery(int id) {
         this.id = id;
     }
 
@@ -22,7 +22,7 @@ public class Grocery {
         this.id = id;
         this.Name = name;
         this.Qty = qty;
-    }
+    }*/
 
     public int getId() {
         return id;
@@ -47,9 +47,6 @@ public class Grocery {
     public void setQty(String qty) {
         Qty = qty;
     }
-
-
-
 
 
 

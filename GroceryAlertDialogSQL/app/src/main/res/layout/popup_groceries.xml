@@ -10,13 +10,14 @@
         android:id="@+id/buttonSaveToGroceries"
         android:layout_width="281dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="172dp"
+        android:layout_marginBottom="48dp"
+        android:shadowColor="#9367CF"
+        android:shadowRadius="10"
         android:text="Save"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
@@ -31,10 +32,10 @@
         android:textColorHint="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/editTextQty"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.829" />
+        app:layout_constraintVertical_bias="0.939" />
 
     <EditText
         android:id="@+id/editTextQty"
@@ -51,19 +52,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.499"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/editTextAllGroceries"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonSaveToGroceries"
-        app:layout_constraintVertical_bias="0.451" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

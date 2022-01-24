@@ -1,5 +1,6 @@
 package com.dokajajob.groceryalertdialogsql.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.dokajajob.groceryalertdialogsql.R;
@@ -25,7 +26,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +41,14 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 
-    private AlertDialog.Builder dialogBuilder;
-    private AlertDialog dialog;
-    private EditText editTextGrocery;
-    private EditText editTextQty;
-    private Button buttonSaveToGroceries;
-    private EditText editTextAllGroceries;
-    private DataHandler dbHandler;
+    public AlertDialog.Builder dialogBuilder;
+    public AlertDialog dialog;
+    public EditText editTextGrocery;
+    public EditText editTextQty;
+    public Button buttonSaveToGroceries;
+    public DataHandler dbHandler;
+    public TextView textViewTitle;
+    private FloatingActionButton fab;
 
 
     @Override
@@ -60,9 +64,19 @@ public class MainActivity extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
+
+
+/*        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);*/
+
         //Data Handler
         dbHandler = new DataHandler(this);
 
+        //Bypass activity on existing groceries
+        byPassMain();
+
+
+        fab = findViewById(R.id.fab);
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,14 +91,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
+/*    private void setSupportActionBar(Toolbar toolbar) {
+    }*/
+
+/*    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
+    }*/
 
-    @Override
+/*    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -97,27 +114,29 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
-    @Override
+/*    @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
-    }
+    }*/
 
-    private void createPopupDialog(){
+    public void createPopupDialog(){
         dialogBuilder = new AlertDialog.Builder(this);
         View view = getLayoutInflater().inflate(R.layout.popup_groceries, null);
 
         editTextGrocery = view.findViewById(R.id.editTextGrocery);
         editTextQty = view.findViewById(R.id.editTextQty);
         buttonSaveToGroceries = view.findViewById(R.id.buttonSaveToGroceries);
-        editTextAllGroceries = view.findViewById(R.id.editTextAllGroceries);
+        //textViewTitle = view.findViewById(R.id.textViewTitle);
 
         dialogBuilder.setView(view);
         dialog = dialogBuilder.create();
         dialog.show();
+
+        //textViewTitle.setText("Create New Grocery");
 
         buttonSaveToGroceries.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,10 +193,33 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 dialog.dismiss();
                 //Start new activity
+                //Start Groceries Activity
+                startActivity(new Intent(MainActivity.this, GroceriesCart.class));
 
             }
-        }, 1000; //Delayed 1 second
-    }
+        }, 1000); //Delayed 1 second
 
     }
+
+    public void byPassMain(){
+        if (dbHandler.countGroceries() > 0){
+
+            //Delay 1 sec
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    //Go to Groceries Cart
+                    Intent intent = new Intent(MainActivity.this, GroceriesCart.class);
+                    Toast.makeText(MainActivity.this, "Going To Cart Strait Away", Toast.LENGTH_LONG).show();
+                    startActivity(intent);
+                    finish();
+
+                }
+            }, 1000);
+
+
+        }
+    }
+
 }

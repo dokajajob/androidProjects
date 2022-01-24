@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.ContactsContract;
+import android.provider.SyncStateContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,13 +63,13 @@ public class DataHandler extends SQLiteOpenHelper {
 
     }
 
-    public Grocery getGrocery(int id){
+    public List<Grocery> getGrocery(int id){
 
         //DB Read
         SQLiteDatabase dbHandler = this.getReadableDatabase();
 
         //SQL
-        Cursor cursor = dbHandler.query(Util.DATABASE_NAME, new String[]
+        Cursor cursor = dbHandler.query(Util.DATABASE_TABLE, new String[]
                 {Util.KEY_Id, Util.KEY_NAME, Util.KEY_Qty}, Util.KEY_Id + "=?",
                 new String[] {String.valueOf(id)}, null, null, null);
 
@@ -76,9 +78,18 @@ public class DataHandler extends SQLiteOpenHelper {
             cursor.moveToFirst();
 
             //Save to constructor
-            Grocery grocery = new Grocery(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2));
+            //Grocery grocery = new Grocery(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2));
 
-            return grocery;
+            Grocery grocery = new Grocery();
+            grocery.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Util.KEY_Id))));
+            grocery.setName(cursor.getString(cursor.getColumnIndex(Util.KEY_NAME)));
+            grocery.setQty(cursor.getString(cursor.getColumnIndex(Util.KEY_Qty)));
+
+            List<Grocery> groceryList= new ArrayList<>();
+            groceryList.add(grocery);
+
+
+        return groceryList;
 
     }
 
@@ -96,9 +107,9 @@ public class DataHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()){
             do {
                 Grocery grocery = new Grocery();
-                grocery.setId(Integer.parseInt(Util.KEY_Id));
-                grocery.setName(Util.KEY_NAME);
-                grocery.setQty(Util.KEY_Qty);
+                grocery.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Util.KEY_Id))));
+                grocery.setName(cursor.getString(cursor.getColumnIndex(Util.KEY_NAME)));
+                grocery.setQty(cursor.getString(cursor.getColumnIndex(Util.KEY_Qty)));
 
                 //Save to list
                 ListOfAllGroceries.add(grocery);

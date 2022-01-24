@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GroceryAlertDialogSQL">
         <activity
+            android:name=".Activities.PopUpCreateGrocery"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.GroceriesDetails"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.GroceriesCart"
+            android:exported="false" />
+        <activity
             android:name=".Activities.MainActivity"
             android:exported="true"
             android:label="@string/app_name"

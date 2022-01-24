@@ -53,6 +53,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 //Read all contacts
+                for (int i = 1; i < 10; i++){
+                    Contact contact = db.getContact(i);
+                    Log.d("Contact", String.valueOf(contact));
+                }
+
+
                 Log.d("Reading: ", "Reading all contacts...");
                 List<Contact> contactList = db.getAllContacts();
 

@@ -27,7 +27,7 @@ import java.util.List;
  */
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-   private Context context;
+//   private Context context;
     private List<Grocery> groceryItems;
     private AlertDialog.Builder alertDialogBuilder;
     private AlertDialog dialog;
