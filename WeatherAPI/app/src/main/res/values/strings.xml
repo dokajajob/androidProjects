@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">WeatherAPI</string>
+    <string name="action_settings">Enter Destination</string>
+    <string name="enter_item">Weather Check</string>
+    <string name="hint_item">Enter City</string>
+    <string name="save_title">Search</string>
+</resources>

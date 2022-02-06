@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "649205773813",
+    "firebase_url": "https://dokajajobintro-default-rtdb.firebaseio.com",
+    "project_id": "dokajajobintro",
+    "storage_bucket": "dokajajobintro.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:649205773813:android:5616c26a9bb8835efb1cbc",
+        "android_client_info": {
+          "package_name": "com.dokajajob.firebaseintro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "649205773813-h59cfiqtvqjsu7mp0d4p7rs4tlf78vf8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dokajajob.firebaseintro",
+            "certificate_hash": "6fb592c627f0843e33f3343ee415ced1b562ec90"
+          }
+        },
+        {
+          "client_id": "649205773813-pah5uert66rfa0oerehicvs25kftrmo6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6WSC2k_LrmY02FPZf6ymcA9f3PxrbQx4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "649205773813-pah5uert66rfa0oerehicvs25kftrmo6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

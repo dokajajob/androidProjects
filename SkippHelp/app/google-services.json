@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "39544395934",
+    "project_id": "skipphelp",
+    "storage_bucket": "skipphelp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:39544395934:android:449062a471ff9bfdc7838f",
+        "android_client_info": {
+          "package_name": "com.dokajajob.skipphelp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "39544395934-k24hbm3hmludorod5g0k4thffepkbsf1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dokajajob.skipphelp",
+            "certificate_hash": "2625b9999f41b3f0887aab81d946763e928a18e5"
+          }
+        },
+        {
+          "client_id": "39544395934-p0vkgpf7a447nq02l9r8mkjc51c63p9a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3MWqgvitjSsQtOdZnMTZ6SylObSq2YIw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "39544395934-p0vkgpf7a447nq02l9r8mkjc51c63p9a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
