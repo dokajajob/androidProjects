@@ -1,29 +1,29 @@
-package com.dokajajob.skipphelp;
+package com.dokajajob.skipphelp.Activities;
 
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import com.dokajajob.skipphelp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.io.IOException;
+import com.google.firebase.functions.FirebaseFunctions;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -40,38 +40,21 @@ public class MainActivity extends AppCompatActivity {
     public String userName;
     private String userPasswd;
     private Button buttonSignOut;
-    private Button buttonCreate;
+    private ImageView buttonCreate;
     private GifImageView loginImage;
     private GifImageView logoutImage;
+    private FirebaseFunctions mFunctions;
+    private FirebaseUser mUser;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         firebaseAuth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
-
-        databaseReference = database.getReference("message");
-        databaseReference = database.getReference("ok");
-
-        databaseReference.setValue("Hello, World!");
-        databaseReference.setValue("ed");
-
-        //Write to DB
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String value = snapshot.getValue(String.class);
-                Toast.makeText(MainActivity.this, value, Toast.LENGTH_LONG).show();
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        //database = FirebaseDatabase.getInstance();
 
         //Auth change
         firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -79,10 +62,16 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
                 FirebaseUser user = firebaseAuth.getCurrentUser();
+                //String uID = user.getUid();
+
                 if (user != null) {
                     //user signed in
                     Log.d(TAG , " signed in" );
                     Log.d(TAG, user.getEmail());
+                    Toast.makeText(MainActivity.this,  user.getEmail() + " signed in", Toast.LENGTH_LONG).show();
+                    //Going to posts activity
+                    startActivity(new Intent(MainActivity.this, PostListActivity.class));
+                    finish();
                 } else {
                     Log.d(TAG , " signed out");
                     Toast.makeText(MainActivity.this, "User signed out", Toast.LENGTH_LONG).show();
@@ -111,6 +100,9 @@ public class MainActivity extends AppCompatActivity {
                                         //Log.d(TAG, userName + " is logged in");
                                         Toast.makeText(MainActivity.this,   userName + " is logged in", Toast.LENGTH_LONG).show();
                                         Log.d(TAG, firebaseAuth.getCurrentUser().toString());
+                                        //Going to posts activity
+                                        startActivity(new Intent(MainActivity.this, PostListActivity.class));
+                                        finish();
 
                                     } else {
 
@@ -124,21 +116,12 @@ public class MainActivity extends AppCompatActivity {
 
 
                 } else {
-                    Toast.makeText(MainActivity.this, "Enter credetials first", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Enter credentials first", Toast.LENGTH_LONG).show();
                 }
             }
         });
 
-        //Log-out
-        logoutImage = findViewById(R.id.logoutImage);
-        logoutImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                firebaseAuth.signOut();
-
-            }
-        });
 
         //Create User
         buttonCreate = findViewById(R.id.buttonCreate);
@@ -158,8 +141,8 @@ public class MainActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
                                         FirebaseUser user = firebaseAuth.getCurrentUser();
-                                        databaseReference = database.getReference("created");
-                                        databaseReference.setValue(userName);
+/*                                        databaseReference = database.getReference("created");
+                                        databaseReference.setValue(userName);*/
                                         Toast.makeText(MainActivity.this, userName + " created", Toast.LENGTH_LONG).show();
                                     } else {
                                         Toast.makeText(MainActivity.this, userName + " failed to create user", Toast.LENGTH_LONG).show();
@@ -177,15 +160,47 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+
+        switch (item.getItemId()) {
+
+            case R.id.action_signout:
+
+                if (mUser != null && mAuth != null) {
+
+                    mAuth.signOut();
+                    finish();
+                }
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
+    public boolean onCreateOptionsMenu (Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
+
+        //mFunctions = FirebaseFunctions.getInstance("europe-west1");
+
         firebaseAuth.addAuthStateListener(firebaseAuthListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+
+        //mFunctions = FirebaseFunctions.getInstance("europe-west1");
+
         if (firebaseAuthListener != null) {
             firebaseAuth.removeAuthStateListener(firebaseAuthListener);
 
