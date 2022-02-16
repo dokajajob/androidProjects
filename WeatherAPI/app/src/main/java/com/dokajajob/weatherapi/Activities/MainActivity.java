@@ -1,12 +1,16 @@
 package com.dokajajob.weatherapi.Activities;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.os.ConfigurationCompat;
 
 import android.content.Intent;
-import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,11 +24,11 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import Data.DataHandlerAdapter;
+import Model.CityItems;
 import com.dokajajob.weatherapi.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -32,17 +36,23 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
-import java.util.Locale;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import android.graphics.BitmapFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final static String URL = "http://api.weatherstack.com/current?access_key=695ba834935173efb8526a20a5cccd85&query=New%20York";
-
+    private static String URL = "";
+    private static String n_query = null;
+    private static String mText = null;
     private RequestQueue mRequestQueue;
     private StringRequest mStringRequest;
     private FloatingActionButton floatingActionButton;
@@ -51,6 +61,11 @@ public class MainActivity extends AppCompatActivity {
     private EditText item;
     private TextView title;
     private Button search;
+    private static final String LINK_REGEX = "\\(?\\b(http://|www[.])[-A-Za-z0-9+&amp;@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&amp;@#/%=~_()|]";
+    private Uri imageFilePath;
+    private Bitmap imageToStore;
+    private Bitmap image;
+    private Boolean flag = true;
 
     //Toolbar menu
     @Override
@@ -106,9 +121,9 @@ public class MainActivity extends AppCompatActivity {
 
         alertDialogBuilder = new AlertDialog.Builder(this);
         View view = getLayoutInflater().inflate(R.layout.popup, null);
-        title = findViewById(R.id.title);
-        item = findViewById(R.id.item);
-        search = findViewById(R.id.search);
+        title = view.findViewById(R.id.title);
+        item = view.findViewById(R.id.item);
+        search = view.findViewById(R.id.search);
 
         alertDialogBuilder.setView(view);
         alertDialog = alertDialogBuilder.create();
@@ -116,10 +131,12 @@ public class MainActivity extends AppCompatActivity {
 
         search.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 if (!item.getText().toString().isEmpty()){
-                    Toast.makeText(MainActivity.this, "testButton", Toast.LENGTH_LONG).show();
-                    //loadWeather(v);
+                    search.setClickable(false);
+                    Toast.makeText(MainActivity.this, item.getText().toString() + " Weather Clicked. Please Wait.", Toast.LENGTH_LONG).show();
+                    CityItems cityItems = new CityItems();
+                    loadWeather(view, cityItems);
                 }
             }
         });
@@ -127,13 +144,34 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void loadWeather(View v) {
+    private void loadWeather(View view, CityItems cityItems) {
+
+            //Strict mode for HTTPS
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
 
             //Volley library for API extraction
             mRequestQueue = Volley.newRequestQueue(this);
 
+            //City Name Set For API Search
+            String cityName = item.getText().toString();
+            //String rCityName=cityName.replace(' ','%20');
+            String rCityName = cityName.trim().replaceAll(" +", "%20");
+            Log.d("rCityName", rCityName);
+
+            if (cityName.contains(" ")){
+                      URL = "http://api.weatherstack.com/current?access_key=695ba834935173efb8526a20a5cccd85&query=" + rCityName;
+                      Log.d("afterWhiteSpaces: ", URL);}
+            else{
+                      URL = "http://api.weatherstack.com/current?access_key=695ba834935173efb8526a20a5cccd85&query=" + cityName;
+                      Log.d("withoutWiteSpaces", URL);}
+
+
+
             //Get initial Weather API
             mStringRequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onResponse(String response) {
                     Log.d("Response: ", response.toString());
@@ -141,16 +179,91 @@ public class MainActivity extends AppCompatActivity {
                         JSONObject obj = new JSONObject(response);
                         JSONObject request = obj.getJSONObject("request");
                         Log.d("Request:", String.valueOf(request));
-                        String type = request.getString("type");
-                        Log.d("Type:", String.valueOf(type));
+                        //City Search in API
+                        if (!(request.getString("query").contains("request_failed"))) {
+                            n_query = request.getString("query");
+                            Log.d("query:", n_query);
+                            cityItems.setCityName(cityName);
 
-                        //Load Intent With City Name And Go To RecyclerActivity
-                        Intent intent = new Intent(MainActivity.this, RecyclerActivity.class);
-                        intent.putExtra("cityName", item.getText().toString());
-                        startActivity(intent);
+
+
+                            //Temperature Search in API
+                            JSONObject current = obj.getJSONObject("current");
+                            String temperature = current.getString("temperature");
+                            Log.d("temperature:", temperature);
+                            cityItems.setCityTemperature(temperature);
+
+                            //PNG Search in API
+                            JSONObject currentWI = obj.getJSONObject("current");
+                            Log.d("current", String.valueOf(current));
+                            JSONArray weather_icons = currentWI.getJSONArray("weather_icons");
+                            //Log.d("weather_icons", String.valueOf(weather_icons));
+                            Log.d("weather_icons", URLDecoder.decode(String.valueOf(weather_icons)));
+                            String pngLink = String.valueOf(weather_icons);
+                            Log.d("pngLink", pngLink);
+                            String png = pngLink.replaceAll("[\\\\<>\\[\\],-]", "");
+                            png = png.replaceAll("\"", "");
+                            Log.d("png", png);
+
+                            //cityItems.setImage(getBitmapFromURL(png));
+
+                            //String tst = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pinterest.com%2Fpin%2F709246641298069234%2F&psig=AOvVaw1Re40t77_U3zUQsdWL-f3Q&ust=1643794602637000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCNiMnKqa3vUCFQAAAAAdAAAAABAJ";
+                            //tst = tst.replaceAll("\"", "");
+
+/*                            //URI to Bitmap
+                            imageFilePath = Uri.parse(png);
+                            Log.d("imageFilePath", String.valueOf(imageFilePath));
+                            try {
+                                imageToStore = MediaStore.Images.Media.getBitmap(getContentResolver(),imageFilePath);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }*/
+
+                            //Get PNG from Web
+                            try {
+                                java.net.URL url = new URL(png);
+                                image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                Log.d("image ", String.valueOf(image));
+                            } catch(IOException e) {
+                                System.out.println(e);
+                            }
+                            cityItems.setImage(image);
+
+
+                            //Date
+                            String mDate = LocalDate.now().toString();
+                            Log.d("mDate", mDate);
+                            cityItems.setDateItemAdded(mDate);
+
+/*                            //Load Intent With (City Name & Temperature & PNG) And Go To RecyclerActivity
+                            Intent intent = new Intent(MainActivity.this, RecyclerActivity.class);
+                            intent.putExtra("cityName", cityItems.getCityName());
+                            intent.putExtra("temperature", cityItems.getCityTemperature());
+                            intent.putExtra("png", cityItems.getImageName());
+                            intent.putExtra("date", cityItems.getDateItemAdded());
+                            //intent.putExtra("cityItemsList", String.valueOf(cityItemsList));
+                            startActivity(intent);*/
+
+                            //Save to DB
+                            DataHandlerAdapter db = new DataHandlerAdapter(MainActivity.this);
+                            db.addCity(cityItems);
+
+                            //Go to RecyclerActivity
+                            Intent intent = new Intent(MainActivity.this, RecyclerActivity.class);
+                            startActivity(intent);
+
+
+                        } else {
+                            Log.d("WRONG_CITY", cityName);
+                            Toast.makeText(MainActivity.this, "Entered Wrong City Name", Toast.LENGTH_LONG).show();
+                        }
+
+
 
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        Log.d("Error = ", e.getMessage());
+                        Toast.makeText(MainActivity.this, "Wrong URL For Weather Provided", Toast.LENGTH_LONG).show();
                     }
 
                 }
@@ -159,6 +272,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.d("Error = ", error.getMessage());
+
                 }
             });
             mRequestQueue.add(mStringRequest);
@@ -166,27 +280,20 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
-
-
-/*    //Get Device IP
-    public static String getLocalIpAddress() {
+    public static Bitmap getBitmapFromURL(String src) {
         try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
-                        return inetAddress.getHostAddress();
-                    }
-                }
-            }
-        } catch (SocketException ex) {
-            ex.printStackTrace();
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
-        return null;
-    }*/
-
+    }
 
 
 }

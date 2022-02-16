@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Get2Sail_p1</string>
+    <string name="title_activity_maps">Maps_Activity</string>
+    <string name="logout">Logout</string>
+    <string name="add_post">Edit Profile</string>
+</resources>
