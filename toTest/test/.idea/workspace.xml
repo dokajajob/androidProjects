@@ -14,8 +14,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d9ab847-38d8-4ee6-8fec-99c8747b6639" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../../Get2Sail_GPSprovider/app/src/main/java/com/dokajajob/get2sail_p1/Activities/Maps_Activity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Get2Sail_GPSprovider/app/src/main/java/com/dokajajob/get2sail_p1/Activities/Maps_Activity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../GroceriesListEd/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../GroceriesListEd/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../toDelete/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../toDelete/.idea/compiler.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../toDelete/.idea/gradle.xml" beforeDir="false" />
@@ -56,7 +54,6 @@
       <change beforePath="$PROJECT_DIR$/../../toDelete/gradlew" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../toDelete/gradlew.bat" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../toDelete/settings.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

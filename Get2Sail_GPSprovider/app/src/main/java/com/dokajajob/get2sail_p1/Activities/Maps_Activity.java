@@ -30,6 +30,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -47,6 +48,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import Utils.GPS;
 
@@ -284,6 +289,8 @@ public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallba
 
                 gpsList = new ArrayList<>();
                 //listItems = new ArrayList<>();
+                List<Marker> AllMarkers = new ArrayList<Marker>();
+
 
                 GPS gps = snapshot.getValue(GPS.class);
                 //Log.d("post", gps.toString());
@@ -321,7 +328,10 @@ public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallba
 
                         mp.title(lat + " : " + lng + "\n" + gps.getUid());
 
-                        mMap.addMarker(mp);
+                        //mMap.addMarker(mp);
+                        Marker mLocationMarker = mMap.addMarker(mp);
+                        AllMarkers.add(mLocationMarker);
+
 /*                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                                 new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)), 16));*/
 
@@ -331,6 +341,16 @@ public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallba
 
 
                 }
+
+                Handler handler = new Handler();
+                handler.postDelayed(() -> {
+
+                   removeAllMarkers(AllMarkers);
+                    Log.d("removeAllMarkersHan", "removeAllMarkersHan");
+
+                }, 600000);
+
+
 
 
             }
@@ -359,6 +379,21 @@ public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallba
 
 
     }
+
+    /** clear Markers **/
+    private void removeAllMarkers(List<Marker> allMarkers) {
+        for (Marker mLocationMarker: allMarkers) {
+            mLocationMarker.remove();
+            Log.d("mLocationMarker ", "mLocationMarker");
+        }
+        allMarkers.clear();
+
+        //Call add markers again
+        addMarkers();
+
+    }
+
+
 
     /** clear Map **/
     private void clearMap() {
