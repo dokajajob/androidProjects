@@ -304,21 +304,30 @@ public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallba
                     //System.out.println(lat);
                     gps.setLng(c.getLng());
                     //System.out.println(lng);
+                    gps.setUid(c.getUid());
+                    System.out.println("uidFromDb " + gps.getUid());
+                    System.out.println("uidUser " + mUID);
 
-                    lat = gps.getLat();
-                    lng = gps.getLng();
+                    if (!gps.getUid().equals(mUID)) {
 
-                    Log.d("latFromFirebase : ", String.valueOf(lat));
-                    Log.d("latFromFirebase : ", String.valueOf(lng));
+                        lat = gps.getLat();
+                        lng = gps.getLng();
+
+                        Log.d("latFromFirebase : ", String.valueOf(lat));
+                        Log.d("latFromFirebase : ", String.valueOf(lng));
 
 
-                    mp.position(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)));
+                        mp.position(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)));
 
-                    mp.title(lat + " : " + lng);
+                        mp.title(lat + " : " + lng + "\n" + gps.getUid());
 
-                    mMap.addMarker(mp);
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                            new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)), 16));
+                        mMap.addMarker(mp);
+/*                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)), 16));*/
+
+                    } else {
+                        Log.d("uidCheck ", "same uid " + mUID);
+                    }
 
 
                 }
@@ -411,7 +420,7 @@ public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallba
         mUser = mAuth.getCurrentUser();
         mUID = mUser.getUid();*/
 
-        //mDatabaseReference = mDatabase.getReference().child(UserTypeToDisplay).child(mUID);
+        mDatabaseReference = mDatabase.getReference().child(UserTypeToDisplay);
 
         if (UserTypeToDisplay == "skipper") {
             mp.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
