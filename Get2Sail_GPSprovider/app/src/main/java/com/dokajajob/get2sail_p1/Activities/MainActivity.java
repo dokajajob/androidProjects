@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -11,6 +12,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -70,7 +72,9 @@ public class MainActivity extends AppCompatActivity  {
     public Location mCurrentLocation;
     private Switch switch_skipper;
     private Boolean isSkipper = false;
+    private Boolean switchState = false;
     private Boolean authorized;
+    private String UserIsMain;
 
 
 
@@ -80,6 +84,7 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         //Check permissions
         if (checkPermissions()) {
@@ -91,19 +96,26 @@ public class MainActivity extends AppCompatActivity  {
 
         }
 
-        //user switch
+
+
+        //User switch state
         switch_skipper = findViewById(R.id.switch_skipper);
         switch_skipper.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = getSharedPreferences("com.dokajajob.get2sail_p1", MODE_PRIVATE).edit();
                 if (isChecked) {
-                    isSkipper = true;
+                    //isSkipper = true;
+                    editor.putBoolean("isSkipperPref", true);
 
                 } else {
-                    isSkipper = false;
+                    //isSkipper = false;
+                    editor.putBoolean("isSkipperPref", false);
 
                 }
+                editor.apply();
             }
         });
+
 
 
 
@@ -117,8 +129,18 @@ public class MainActivity extends AppCompatActivity  {
 
                 FirebaseUser user = firebaseAuth.getCurrentUser();
 
-                if (user != null && checkPermissions()) {
+                //User switch state change
+                SharedPreferences sharedPrefs = getSharedPreferences("com.dokajajob.get2sail_p1", MODE_PRIVATE);
+                if (sharedPrefs != null) {
+                    isSkipper = sharedPrefs.getBoolean("isSkipperPref", false);
+                    switch_skipper.setChecked(isSkipper);
 
+                }
+
+                System.out.println("isSkipperPref : " + isSkipper);
+
+
+                if (user != null && checkPermissions()) {
 
 
                     //user signed in
@@ -131,12 +153,28 @@ public class MainActivity extends AppCompatActivity  {
                     Intent intent = new Intent(MainActivity.this, Maps_Activity.class);
                     intent.putExtra("userType", isSkipper);
                     intent.putExtra("authorized", authorized);
+
                     final Handler handler = new Handler(Looper.getMainLooper());
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+
+/*                         //User switch state change
+                        SharedPreferences sharedPrefs = getSharedPreferences("com.dokajajob.get2sail_p1", MODE_PRIVATE);
+                        if (sharedPrefs != null) {
+                            isSkipper = sharedPrefs.getBoolean("isSkipperPref", false);
+                            switch_skipper.setChecked(isSkipper);
                             startActivity(intent);
                             finish();
+
+                        } else {
+                            startActivity(intent);
+                            finish();
+                        }*/
+
+                            startActivity(intent);
+                            finish();
+
 
                         }
                     }, 1000);
@@ -238,6 +276,14 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SharedPreferences.Editor editor = getSharedPreferences("com.dokajajob.get2sail_p1", MODE_PRIVATE).edit();
+        //editor.clear();
+        editor.apply(); // commit changes
+    }
+
 
     /**
      * Menu builder
@@ -249,22 +295,7 @@ public class MainActivity extends AppCompatActivity  {
 
         switch (item.getItemId()) {
 
-            case R.id.action_signout:
 
-                if (mUser != null && mAuth != null) {
-
-                    mAuth.signOut();
-                    finish();
-                }
-                break;
-
-            case R.id.action_show_location:
-
-                if (mCurrentLocation != null) {
-
-                    //showLastKnownLocation();
-                }
-                break;
 
         }
         return super.onOptionsItemSelected(item);
@@ -284,6 +315,8 @@ public class MainActivity extends AppCompatActivity  {
         super.onStart();
 
         firebaseAuth.addAuthStateListener(firebaseAuthListener);
+
+
     }
 
     /**
