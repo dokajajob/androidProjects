@@ -14,14 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d9ab847-38d8-4ee6-8fec-99c8747b6639" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../Get2Sail_GPSprovider.zip" beforeDir="false" afterPath="$PROJECT_DIR$/../Get2Sail_GPSprovider.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/Utils/GPS.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/Utils/GPS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/dokajajob/get2sail_p1/Activities/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/dokajajob/get2sail_p1/Activities/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/dokajajob/get2sail_p1/Activities/Maps_Activity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/dokajajob/get2sail_p1/Activities/Maps_Activity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/menu_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/menu_main.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/menu_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/menu_menu.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../toDelete/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../toDelete/.idea/compiler.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../toDelete/.idea/gradle.xml" beforeDir="false" />
@@ -68,7 +61,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[BV9500PEEA0031571]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/home/dokaja/.android/avd/Copy_of_Pixel_4a_API_32_x86_B.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -150,7 +143,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/app/src/main/java" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Get2Sailp1" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.2" />
